@@ -1,0 +1,29 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "dist/app.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "dist/client/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "dist/app.js",
+      "headers": {
+        "Access-Control-Allow-Credentials": "true",
+        "Cache-Control": "no-cache, no-store, max-age=0, must-revalidate",
+        "Access-Control-Allow-Method": "GET, PUT, POST, DELETE, UPDATE, OPTIONS",
+        "Access-Control-Allow-Headers": "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
+      }
+    },
+    {
+      "src": "/",
+      "dest": "dist/client/index.html"
+    }
+  ]
+}
