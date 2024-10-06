@@ -81,14 +81,14 @@ const awsUploadFile = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             yield _utils_1.s3.send(uploadThumbnailImage);
         }
         const imageResults = {
-            image: {
+            fileResults: {
                 url: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${targetPath}/${newFileName}.${fileType}`,
                 thumbnailUrl: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${targetPath}/${thumbPath}/${newFileName}.${fileType}`,
                 fileName: `${newFileName}.${fileType}`,
             }
         };
         const fileResults = {
-            file: {
+            fileResults: {
                 url: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${targetPath}/${newFileName}.${fileType}`,
                 fileName: `${newFileName}.${fileType}`,
             }

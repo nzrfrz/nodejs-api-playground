@@ -80,7 +80,7 @@ export const awsUploadFile = async (req: express.Request, res: express.Response)
     }
 
     const imageResults = {
-      image: {
+      fileResults: {
         url: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${targetPath}/${newFileName}.${fileType}`,
         thumbnailUrl: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${targetPath}/${thumbPath}/${newFileName}.${fileType}`,
         fileName: `${newFileName}.${fileType}`,
@@ -88,7 +88,7 @@ export const awsUploadFile = async (req: express.Request, res: express.Response)
     };
 
     const fileResults = {
-      file: {
+      fileResults: {
         url: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${targetPath}/${newFileName}.${fileType}`,
         fileName: `${newFileName}.${fileType}`,
       }
