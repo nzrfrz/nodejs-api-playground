@@ -20,13 +20,6 @@ const node_crypto_1 = __importDefault(require("node:crypto"));
 const client_s3_1 = require("@aws-sdk/client-s3");
 const _utils_1 = require("../../_utils");
 dotenv_1.default.config();
-// const s3 = new S3Client({
-//   region: process.env.AWS_REGION,
-//   credentials: {
-//     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-//     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-//   }
-// });
 const HD_WIDTH = 1280;
 const HD_HEIGHT = 720;
 const THUMBNAIL_WIDTH = HD_WIDTH / 10;
@@ -35,7 +28,6 @@ const storage = multer_1.default.memoryStorage();
 exports.awsUploadMulter = (0, multer_1.default)({ storage: storage });
 const awsUploadFile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // console.log(cryptojs.randomBytes(9).toString("hex"));
         const file = req.file;
         if (!file) {
             (0, _utils_1.responseHelper)(res, _utils_1.status.errorRequest, _utils_1.message.errorRequest, null);
@@ -46,7 +38,7 @@ const awsUploadFile = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         const fileType = file.originalname.split(".").slice(-1).shift();
         let targetFileBuffer;
         let uploadTargetFile;
-        if (file.mimetype.startsWith('image/') && targetPath === "images") {
+        if (file.mimetype.startsWith('image/') && targetPath.toString().includes("images")) {
             const metadata = yield (0, sharp_1.default)(file.buffer).metadata();
             const { width, height } = metadata;
             if (width > HD_WIDTH || height > HD_HEIGHT) {
@@ -62,7 +54,7 @@ const awsUploadFile = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                 ContentType: file.mimetype,
             });
         }
-        else if (!file.mimetype.startsWith('image/') && targetPath === "files") {
+        else if (!file.mimetype.startsWith('image/') && targetPath.toString().includes("files")) {
             targetFileBuffer = file.buffer;
             const targetImageKey = `${targetPath}/${newFileName}.${fileType}`;
             uploadTargetFile = new client_s3_1.PutObjectCommand({
@@ -101,7 +93,7 @@ const awsUploadFile = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                 fileName: `${newFileName}.${fileType}`,
             }
         };
-        const results = targetPath === "images" ? imageResults : fileResults;
+        const results = targetPath.toString().includes("images") ? imageResults : fileResults;
         (0, _utils_1.responseHelper)(res, _utils_1.status.success, _utils_1.message.onlySuccess, results);
     }
     catch (error) {

@@ -3,7 +3,7 @@ import multer from "multer";
 import express from "express";
 import sharp from "sharp";
 import cryptojs from "node:crypto";
-import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
+import { PutObjectCommand } from '@aws-sdk/client-s3';
 import {
   s3,
   status,
@@ -11,14 +11,6 @@ import {
   responseHelper,
 } from "../../_utils";
 dotenv.config();
-
-// const s3 = new S3Client({
-//   region: process.env.AWS_REGION,
-//   credentials: {
-//     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-//     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-//   }
-// });
 
 const HD_WIDTH = 1280;
 const HD_HEIGHT = 720;
@@ -30,8 +22,6 @@ export const awsUploadMulter = multer({ storage: storage });
 
 export const awsUploadFile = async (req: express.Request, res: express.Response) => {
   try {
-
-    // console.log(cryptojs.randomBytes(9).toString("hex"));
     const file = req.file;
     if (!file) {
       responseHelper(res, status.errorRequest, message.errorRequest, null);
@@ -44,7 +34,7 @@ export const awsUploadFile = async (req: express.Request, res: express.Response)
 
     let targetFileBuffer;
     let uploadTargetFile;
-    if (file.mimetype.startsWith('image/') && targetPath === "images") {
+    if (file.mimetype.startsWith('image/') && targetPath.toString().includes("images")) {
       const metadata = await sharp(file.buffer).metadata();
       const { width, height } = metadata;
       if (width > HD_WIDTH || height > HD_HEIGHT) {
@@ -60,7 +50,7 @@ export const awsUploadFile = async (req: express.Request, res: express.Response)
         ContentType: file.mimetype,
       });
     }
-    else if (!file.mimetype.startsWith('image/') && targetPath === "files") {
+    else if (!file.mimetype.startsWith('image/') && targetPath.toString().includes("files")) {
       targetFileBuffer = file.buffer;
       const targetImageKey = `${targetPath}/${newFileName}.${fileType}`;
       uploadTargetFile = new PutObjectCommand({
@@ -104,7 +94,7 @@ export const awsUploadFile = async (req: express.Request, res: express.Response)
       }
     };
 
-    const results = targetPath === "images" ? imageResults : fileResults;
+    const results = targetPath.toString().includes("images") ? imageResults : fileResults;
 
     responseHelper(res, status.success, message.onlySuccess, results);
   } catch (error) {
