@@ -31,6 +31,6 @@ export const awsDeleteFile = async (req: express.Request, res: express.Response)
 
     responseHelper(res, status.success, message.successDelete, null);
   } catch (error) {
-    responseHelper(res, status.errorServer, message.errorServer, error);
+    responseHelper(res, status.errorServer, message.errorServer, error.toString());
   }
 };

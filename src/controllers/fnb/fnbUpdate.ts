@@ -11,6 +11,12 @@ import { FNB, FNB_CATEGORIES } from "../../models";
 export const fnbUpdate = async (req: express.Request, res: express.Response) => {
   try {
     const { itemID } = req.params;
+    const prevFnB = await findOneDocument(FNB, { _id: itemID });
+    if (prevFnB.editable === false) {
+      responseHelper(res, status.forbidden, "You are not authorized to do this action!", null);
+      return;
+    }
+
     const category = await findOneDocument(FNB_CATEGORIES, { _id: req.body.category.id });
     const payload = {
       ...req.body,

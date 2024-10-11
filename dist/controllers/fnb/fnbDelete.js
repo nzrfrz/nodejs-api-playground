@@ -15,6 +15,11 @@ const models_1 = require("../../models");
 const fnbDelete = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { itemID } = req.params;
+        const prevFnB = yield (0, _utils_1.findOneDocument)(models_1.FNB, { _id: itemID });
+        if (prevFnB.editable === false) {
+            (0, _utils_1.responseHelper)(res, _utils_1.status.forbidden, "You are not authorized to do this action!", null);
+            return;
+        }
         if (itemID === "all") {
             const results = yield (0, _utils_1.deleteAll)(models_1.FNB);
             (0, _utils_1.responseHelper)(res, _utils_1.status.success, _utils_1.message.successDelete, results);

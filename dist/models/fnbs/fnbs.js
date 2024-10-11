@@ -21,6 +21,7 @@ const FnbSchema = new mongoose_1.default.Schema({
         title: String,
         slug: String,
     },
+    editable: Boolean,
     updatedAt: String,
     createdAt: String,
 }, {

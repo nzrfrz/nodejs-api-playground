@@ -20,6 +20,7 @@ export const fnbInsert = async (req: express.Request, res: express.Response) => 
 
         const payload = {
           ...element,
+          editable: false,
           category: category.toJSON()
         };
 
@@ -34,8 +35,9 @@ export const fnbInsert = async (req: express.Request, res: express.Response) => 
       const category = await findOneDocument(FNB_CATEGORIES, { _id: request.category.id });
       const payload = {
         ...request,
+        editable: req.body.editable === undefined ? true : req.body.editable,
         category: category.toJSON()
-      };
+      };      
       const finalPayload = new FNB(payload);
 
       const results = await insertNewDocument(finalPayload);

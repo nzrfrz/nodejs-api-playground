@@ -13,6 +13,6 @@ export const fnbCatInsert = async (req: express.Request, res: express.Response) 
     const results = await insertNewDocument(payload);
     responseHelper(res, status.successCreate, message.successInsert, results);
   } catch (error) {
-    responseHelper(res, status.errorServer, message.errorServer, error);
+    responseHelper(res, status.errorServer, message.errorServer, error.toString());
   }
 };

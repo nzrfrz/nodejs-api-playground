@@ -98,7 +98,7 @@ export const awsUploadFile = async (req: express.Request, res: express.Response)
 
     responseHelper(res, status.success, message.onlySuccess, results);
   } catch (error) {
-    console.log(error);
-    responseHelper(res, status.errorServer, message.errorServer, error);
+    // console.log(error);
+    responseHelper(res, status.errorServer, message.errorServer, error.toString());
   }
 };

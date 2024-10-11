@@ -97,6 +97,6 @@ export const awsUploadFromURL = async (req: express.Request, res: express.Respon
 
     responseHelper(res, status.success, message.onlySuccess, results);
   } catch (error) {
-    responseHelper(res, status.errorServer, message.errorServer, error);
+    responseHelper(res, status.errorServer, message.errorServer, error.toString());
   }
 };

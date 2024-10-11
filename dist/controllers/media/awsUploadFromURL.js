@@ -96,7 +96,7 @@ const awsUploadFromURL = (req, res) => __awaiter(void 0, void 0, void 0, functio
         (0, _utils_1.responseHelper)(res, _utils_1.status.success, _utils_1.message.onlySuccess, results);
     }
     catch (error) {
-        (0, _utils_1.responseHelper)(res, _utils_1.status.errorServer, _utils_1.message.errorServer, error);
+        (0, _utils_1.responseHelper)(res, _utils_1.status.errorServer, _utils_1.message.errorServer, error.toString());
     }
 });
 exports.awsUploadFromURL = awsUploadFromURL;

@@ -15,6 +15,7 @@ export interface FnBProps extends Document {
     title: string,
     slug: string,
   },
+  editable: boolean,
   updatedAt: string,
   createdAt: string,
 };
@@ -35,6 +36,7 @@ const FnbSchema = new mongoose.Schema(
       title: String,
       slug: String,
     },
+    editable: Boolean,
     updatedAt: String,
     createdAt: String,
   },

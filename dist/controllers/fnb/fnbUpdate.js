@@ -15,6 +15,11 @@ const models_1 = require("../../models");
 const fnbUpdate = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { itemID } = req.params;
+        const prevFnB = yield (0, _utils_1.findOneDocument)(models_1.FNB, { _id: itemID });
+        if (prevFnB.editable === false) {
+            (0, _utils_1.responseHelper)(res, _utils_1.status.forbidden, "You are not authorized to do this action!", null);
+            return;
+        }
         const category = yield (0, _utils_1.findOneDocument)(models_1.FNB_CATEGORIES, { _id: req.body.category.id });
         const payload = Object.assign(Object.assign({}, req.body), { category: category.toJSON() });
         const updateResult = yield (0, _utils_1.updateByID)(models_1.FNB, itemID, payload);

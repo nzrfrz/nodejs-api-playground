@@ -23,6 +23,6 @@ export const fnbGet = async (req: express.Request, res: express.Response) => {
       return;
     }
   } catch (error) {
-    responseHelper(res, status.errorServer, message.errorServer, error);
+    responseHelper(res, status.errorServer, message.errorServer, error.toString());
   }
 };

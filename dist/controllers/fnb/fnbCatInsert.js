@@ -19,7 +19,7 @@ const fnbCatInsert = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         (0, _utils_1.responseHelper)(res, _utils_1.status.successCreate, _utils_1.message.successInsert, results);
     }
     catch (error) {
-        (0, _utils_1.responseHelper)(res, _utils_1.status.errorServer, _utils_1.message.errorServer, error);
+        (0, _utils_1.responseHelper)(res, _utils_1.status.errorServer, _utils_1.message.errorServer, error.toString());
     }
 });
 exports.fnbCatInsert = fnbCatInsert;

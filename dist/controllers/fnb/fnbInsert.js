@@ -19,7 +19,7 @@ const fnbInsert = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             for (let index = 0; index < req.body.length; index++) {
                 const element = req.body[index];
                 const category = yield (0, _utils_1.findOneDocument)(models_1.FNB_CATEGORIES, { _id: element.category.id });
-                const payload = Object.assign(Object.assign({}, element), { category: category.toJSON() });
+                const payload = Object.assign(Object.assign({}, element), { editable: false, category: category.toJSON() });
                 const bulkCreateResults = yield (0, _utils_1.bulkInsertDocument)(models_1.FNB, payload);
                 resultsPool.push(bulkCreateResults);
             }
@@ -29,7 +29,7 @@ const fnbInsert = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         else {
             const request = req.body;
             const category = yield (0, _utils_1.findOneDocument)(models_1.FNB_CATEGORIES, { _id: request.category.id });
-            const payload = Object.assign(Object.assign({}, request), { category: category.toJSON() });
+            const payload = Object.assign(Object.assign({}, request), { editable: req.body.editable === undefined ? true : req.body.editable, category: category.toJSON() });
             const finalPayload = new models_1.FNB(payload);
             const results = yield (0, _utils_1.insertNewDocument)(finalPayload);
             (0, _utils_1.responseHelper)(res, _utils_1.status.successCreate, _utils_1.message.successInsert, results);
