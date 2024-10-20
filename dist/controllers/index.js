@@ -17,6 +17,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./media/awsUploadFile"), exports);
 __exportStar(require("./media/awsDeleteFile"), exports);
 __exportStar(require("./media/awsUploadFromURL"), exports);
+__exportStar(require("./media/awsCheckExistingFile"), exports);
+__exportStar(require("./media/checkUrlFileValidity"), exports);
 __exportStar(require("./fnb/fnbCatInsert"), exports);
 __exportStar(require("./fnb/fnbCatGet"), exports);
 __exportStar(require("./fnb/fnbInsert"), exports);

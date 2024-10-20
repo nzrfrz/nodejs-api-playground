@@ -1,6 +1,8 @@
 export * from "./media/awsUploadFile";
 export * from "./media/awsDeleteFile";
 export * from "./media/awsUploadFromURL";
+export * from "./media/awsCheckExistingFile";
+export * from "./media/checkUrlFileValidity";
 
 export * from "./fnb/fnbCatInsert";
 export * from "./fnb/fnbCatGet";
