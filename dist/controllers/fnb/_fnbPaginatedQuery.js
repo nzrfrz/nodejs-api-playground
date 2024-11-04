@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.fnbPaginatedQuery = void 0;
 const models_1 = require("../../models");
 ;
-const fnbPaginatedQuery = (page, limit, availability, searchValue, priceFilter, dateFilter) => __awaiter(void 0, void 0, void 0, function* () {
+const fnbPaginatedQuery = (page, limit, availability, searchValue, priceFilter, dateFilter, category) => __awaiter(void 0, void 0, void 0, function* () {
     limit = Math.max(0, limit || 0);
     page = Math.max(0, page || 0);
     const skip = page * limit;
@@ -39,10 +39,13 @@ const fnbPaginatedQuery = (page, limit, availability, searchValue, priceFilter, 
             { "category.slug": { $regex: searchValue, $options: "i" } }
         ].filter(Boolean)
     } : {};
+    // Add a filter for category ID if provided
+    const categoryFilter = category ? {
+        "category.id": category
+    } : {};
     // Combine both filters into the `$match` stage
     const matchStage = {
-        $match: Object.assign(Object.assign({}, availabilityFilter), searchFilter // Then add search filters
-        )
+        $match: Object.assign(Object.assign(Object.assign({}, availabilityFilter), searchFilter), categoryFilter)
     };
     const commonStages = [
         ...[matchStage].filter(stage => Object.keys(stage).length > 0)

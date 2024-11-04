@@ -17,6 +17,7 @@ export const fnbPaginatedQuery = async <T extends AnyDocument>(
   searchValue: string,
   priceFilter: string,
   dateFilter: string,
+  category: string
 ): Promise<FNBPaginatedProps<T>> => {
   limit = Math.max(0, limit || 0);
   page = Math.max(0, page || 0);
@@ -48,11 +49,17 @@ export const fnbPaginatedQuery = async <T extends AnyDocument>(
     ].filter(Boolean)
   } : {};
 
+  // Add a filter for category ID if provided
+  const categoryFilter = category ? {
+    "category.id": category
+  } : {};
+
   // Combine both filters into the `$match` stage
   const matchStage = {
     $match: {
       ...availabilityFilter, // Add availability filter first
-      ...searchFilter // Then add search filters
+      ...searchFilter, // Then add search filters
+      ...categoryFilter,  // Include category filter 
     }
   }
 
