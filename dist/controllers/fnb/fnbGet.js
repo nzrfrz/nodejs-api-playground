@@ -18,12 +18,14 @@ const fnbGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const page = Number(req.query.page) - 1;
         const availability = req.query.status;
         const searchValue = req.query.q;
+        const priceFilter = req.query.priceFilter;
+        const dateFilter = req.query.dateFilter;
         if (Number.isNaN(limit) === true || Number.isNaN(page) === true || searchValue === undefined || availability === undefined) {
             (0, _utils_1.responseHelper)(res, _utils_1.status.errorRequest, _utils_1.message.errorRequest, { message: "Query string cannot be empty" });
             return;
         }
         else {
-            const results = yield (0, _fnbPaginatedQuery_1.fnbPaginatedQuery)(page, limit, availability, searchValue);
+            const results = yield (0, _fnbPaginatedQuery_1.fnbPaginatedQuery)(page, limit, availability, searchValue, priceFilter, dateFilter);
             (0, _utils_1.responseHelper)(res, _utils_1.status.success, _utils_1.message.onlySuccess, results);
             return;
         }

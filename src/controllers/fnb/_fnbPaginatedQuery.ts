@@ -15,13 +15,15 @@ export const fnbPaginatedQuery = async <T extends AnyDocument>(
   limit: number,
   availability: string,
   searchValue: string,
+  priceFilter: string,
+  dateFilter: string,
 ): Promise<FNBPaginatedProps<T>> => {
   limit = Math.max(0, limit || 0);
   page = Math.max(0, page || 0);
 
   const skip = page * limit;
   const isNumeric = !isNaN(Number(searchValue));
-  
+
   /**
    * First, query based on `availability` (status).
    * Availability filter logic:
@@ -66,12 +68,37 @@ export const fnbPaginatedQuery = async <T extends AnyDocument>(
     }
   ];
 
+  // Determine the sort order based on the inputs
+  let sortStage: Record<string, 1 | -1> = { _id: -1 }; // Default to sorting by `_id` in descending order
+
+  // Initialize an empty sort object
+  sortStage = {};
+
+  // Apply price filter if specified
+  if (priceFilter === "high-to-low") {
+    sortStage.price = -1;
+  } else if (priceFilter === "low-to-high") {
+    sortStage.price = 1;
+  }
+
+  // Apply date filter if specified
+  if (dateFilter === "newest") {
+    sortStage.createdAt = -1;
+  } else if (dateFilter === "oldest") {
+    sortStage.createdAt = 1;
+  }
+
+  // If neither filter is specified, fallback to default
+  if (Object.keys(sortStage).length === 0) {
+    sortStage = { _id: -1 };
+  }
+
   const totalCountResult = await FNB.aggregate(totalCountPipeline as any).exec();
   const totalCount = totalCountResult.length > 0 ? totalCountResult[0].totalCount : 0;
 
   const paginatedPipeline = [
     ...commonStages,
-    { $sort: { _id: -1 } },
+    { $sort: sortStage },
     { $skip: skip },
     { $limit: limit },
     {
@@ -89,7 +116,7 @@ export const fnbPaginatedQuery = async <T extends AnyDocument>(
   ];
 
   const paginatedResult = await FNB.aggregate(paginatedPipeline as any).exec();
-  
+
   return {
     meta: {
       page: Number(page) + 1,

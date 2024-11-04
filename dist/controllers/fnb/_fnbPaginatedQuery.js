@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.fnbPaginatedQuery = void 0;
 const models_1 = require("../../models");
 ;
-const fnbPaginatedQuery = (page, limit, availability, searchValue) => __awaiter(void 0, void 0, void 0, function* () {
+const fnbPaginatedQuery = (page, limit, availability, searchValue, priceFilter, dateFilter) => __awaiter(void 0, void 0, void 0, function* () {
     limit = Math.max(0, limit || 0);
     page = Math.max(0, page || 0);
     const skip = page * limit;
@@ -54,11 +54,33 @@ const fnbPaginatedQuery = (page, limit, availability, searchValue) => __awaiter(
             $count: "totalCount"
         }
     ];
+    // Determine the sort order based on the inputs
+    let sortStage = { _id: -1 }; // Default to sorting by `_id` in descending order
+    // Initialize an empty sort object
+    sortStage = {};
+    // Apply price filter if specified
+    if (priceFilter === "high-to-low") {
+        sortStage.price = -1;
+    }
+    else if (priceFilter === "low-to-high") {
+        sortStage.price = 1;
+    }
+    // Apply date filter if specified
+    if (dateFilter === "newest") {
+        sortStage.createdAt = -1;
+    }
+    else if (dateFilter === "oldest") {
+        sortStage.createdAt = 1;
+    }
+    // If neither filter is specified, fallback to default
+    if (Object.keys(sortStage).length === 0) {
+        sortStage = { _id: -1 };
+    }
     const totalCountResult = yield models_1.FNB.aggregate(totalCountPipeline).exec();
     const totalCount = totalCountResult.length > 0 ? totalCountResult[0].totalCount : 0;
     const paginatedPipeline = [
         ...commonStages,
-        { $sort: { _id: -1 } },
+        { $sort: sortStage },
         { $skip: skip },
         { $limit: limit },
         {
