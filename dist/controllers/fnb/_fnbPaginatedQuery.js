@@ -106,7 +106,7 @@ const fnbPaginatedQuery = (page, limit, availability, searchValue, priceFilter, 
             limit: Number(limit),
             totalPage: totalCount,
         },
-        fnbList: paginatedResult
+        itemList: paginatedResult
     };
 });
 exports.fnbPaginatedQuery = fnbPaginatedQuery;

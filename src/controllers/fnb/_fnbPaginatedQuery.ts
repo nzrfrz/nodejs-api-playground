@@ -7,7 +7,7 @@ export interface FNBPaginatedProps<T> {
     limit: number;
     totalPage: number;
   };
-  fnbList: T[];
+  itemList: T[];
 };
 
 export const fnbPaginatedQuery = async <T extends AnyDocument>(
@@ -130,6 +130,6 @@ export const fnbPaginatedQuery = async <T extends AnyDocument>(
       limit: Number(limit),
       totalPage: totalCount,
     },
-    fnbList: paginatedResult
+    itemList: paginatedResult
   };
 };
