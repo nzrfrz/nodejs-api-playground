@@ -11,6 +11,7 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const compression_1 = __importDefault(require("compression"));
 const router_1 = __importDefault(require("./router"));
 const allowedOrigins = [
+    "https://666code-react-antd-admin-panel.vercel.app",
     "http://localhost:5173",
     undefined,
 ];

@@ -9,6 +9,7 @@ import compression from "compression";
 import router from "./router";
 
 const allowedOrigins = [
+  "https://666code-react-antd-admin-panel.vercel.app",
   "http://localhost:5173",
   undefined,
 ];
