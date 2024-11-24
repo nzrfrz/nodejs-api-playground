@@ -7,6 +7,7 @@ import bodyParser from "body-parser";
 import compression from "compression";
 
 import router from "./router";
+import { initializeRegionDB } from "./_utils";
 
 const allowedOrigins = [
   "https://666code-react-antd-admin-panel.vercel.app",
@@ -26,28 +27,29 @@ app.use(cors({
 app.use(compression());
 app.use(bodyParser.json());
 
-let dbConnectionStatus = { status: 0, message: "" };
 mongoose.Promise = global.Promise;
-mongoose.set("strictQuery", false).connect(process.env.MONGODB_URI)
-  .then(() => {
-    dbConnectionStatus = { status: 200, message: "Alive..." };
-    console.log("Database Connected");
-  })
-  .catch((error) => {
-    dbConnectionStatus = { status: 500, message: error }
-    console.log("Can't connect to database: \n", error);
-  });
 
-app.get("/api", (req, res) => {
+const startServer = async () => {
+  try {
+    await mongoose.set("strictQuery", false).connect(process.env.MONGODB_URI);
+    await initializeRegionDB();
+
+    app.listen(process.env.PORT, () => {
+      console.log(`Server Running on:\n http://localhost:${process.env.PORT}`);
+    });
+  } catch (error) {
+    console.log("Server Error: \n", error.toString());    
+  }
+};
+
+startServer();
+
+app.get("/api", (_, res) => {
   res.status(200).send({
     status: 200,
-    message: dbConnectionStatus,
+    message: "Server up and running, all database connected successfully...", 
     data: null
   });
 });
 
 app.use("/api", router());
-
-app.listen(process.env.PORT, () => {
-  console.log(`App Running on: http://localhost:${process.env.PORT}`);
-});

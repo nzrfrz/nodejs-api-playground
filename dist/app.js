@@ -1,4 +1,13 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -10,6 +19,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const compression_1 = __importDefault(require("compression"));
 const router_1 = __importDefault(require("./router"));
+const _utils_1 = require("./_utils");
 const allowedOrigins = [
     "https://666code-react-antd-admin-panel.vercel.app",
     "http://localhost:5173",
@@ -27,26 +37,26 @@ app.use((0, cors_1.default)({
 }));
 app.use((0, compression_1.default)());
 app.use(body_parser_1.default.json());
-let dbConnectionStatus = { status: 0, message: "" };
 mongoose_1.default.Promise = global.Promise;
-mongoose_1.default.set("strictQuery", false).connect(process.env.MONGODB_URI)
-    .then(() => {
-    dbConnectionStatus = { status: 200, message: "Alive..." };
-    console.log("Database Connected");
-})
-    .catch((error) => {
-    dbConnectionStatus = { status: 500, message: error };
-    console.log("Can't connect to database: \n", error);
+const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield mongoose_1.default.set("strictQuery", false).connect(process.env.MONGODB_URI);
+        yield (0, _utils_1.initializeRegionDB)();
+        app.listen(process.env.PORT, () => {
+            console.log(`Server Running on:\n http://localhost:${process.env.PORT}`);
+        });
+    }
+    catch (error) {
+        console.log("Server Error: \n", error.toString());
+    }
 });
-app.get("/api", (req, res) => {
+startServer();
+app.get("/api", (_, res) => {
     res.status(200).send({
         status: 200,
-        message: dbConnectionStatus,
+        message: "Server up and running, all database connected successfully...",
         data: null
     });
 });
 app.use("/api", (0, router_1.default)());
-app.listen(process.env.PORT, () => {
-    console.log(`App Running on: http://localhost:${process.env.PORT}`);
-});
 //# sourceMappingURL=app.js.map

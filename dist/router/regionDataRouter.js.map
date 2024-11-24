@@ -1,0 +1,1 @@
+{"version":3,"file":"regionDataRouter.js","sourceRoot":"","sources":["../../src/router/regionDataRouter.ts"],"names":[],"mappings":";;AACA,gDAIwB;AAExB,kBAAe,CAAC,MAAsB,EAAE,EAAE;IACxC,MAAM,CAAC,GAAG,CAAC,8DAA8D,EAAE,kCAAoB,CAAC,CAAC;IACjG,MAAM,CAAC,GAAG,CAAC,sEAAsE,EAAC,iCAAmB,CAAC,CAAC;IACvG,MAAM,CAAC,GAAG,CAAC,iGAAiG,EAAC,sCAAwB,CAAC,CAAC;AACzI,CAAC,CAAC"}

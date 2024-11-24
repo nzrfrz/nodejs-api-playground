@@ -10,3 +10,7 @@ export * from "./fnb/fnbInsert";
 export * from "./fnb/fnbGet";
 export * from "./fnb/fnbUpdate";
 export * from "./fnb/fnbDelete";
+
+export * from "./regionData/countriesBySubregion";
+export * from "./regionData/statesByCountryCode";
+export * from "./regionData/citiesByCountryStateCode";

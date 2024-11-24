@@ -25,4 +25,7 @@ __exportStar(require("./fnb/fnbInsert"), exports);
 __exportStar(require("./fnb/fnbGet"), exports);
 __exportStar(require("./fnb/fnbUpdate"), exports);
 __exportStar(require("./fnb/fnbDelete"), exports);
+__exportStar(require("./regionData/countriesBySubregion"), exports);
+__exportStar(require("./regionData/statesByCountryCode"), exports);
+__exportStar(require("./regionData/citiesByCountryStateCode"), exports);
 //# sourceMappingURL=index.js.map

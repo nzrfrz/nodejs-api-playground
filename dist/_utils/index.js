@@ -18,4 +18,5 @@ __exportStar(require("./responseHelper"), exports);
 __exportStar(require("./asyncWrapper"), exports);
 __exportStar(require("./s3Instance"), exports);
 __exportStar(require("./queryManager"), exports);
+__exportStar(require("./databaseConnManager/regionDBConnect"), exports);
 //# sourceMappingURL=index.js.map
