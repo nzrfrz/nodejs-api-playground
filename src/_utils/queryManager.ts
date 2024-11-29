@@ -1,4 +1,4 @@
-import { Model, Document, Types } from "mongoose";
+import { Model, Document, Types, AnyObject } from "mongoose";
 
 export interface AnyDocument extends Document { };
 type Collection<T extends AnyDocument> = Model<T>;
@@ -28,6 +28,13 @@ export const readDocument = async <T extends AnyDocument>(
   args: {}
 ): Promise<T[]> => {
   return await collection.find(args);
+};
+
+export const readDocumentByModel = async <T>(
+  model: AnyObject, 
+  args: {}
+): Promise<T[]> => {
+  return await model.find(args).toArray();
 };
 
 export const findOneDocument = async <T extends AnyDocument>(

@@ -4,8 +4,10 @@ import {
   message,
   responseHelper,
   readDocument,
+  readDocumentByModel,
 } from "../../_utils";
 import { FNB_CATEGORIES, FnBCategoryProps } from "../../models";
+import { AnyObject, Collection, Model } from "mongoose";
 
 export const fnbCatGet = async (req: express.Request, res: express.Response) => {
   try {

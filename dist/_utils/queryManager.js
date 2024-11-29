@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteAll = exports.deleteByID = exports.updateByID = exports.findOneDocument = exports.readDocument = exports.bulkInsertDocument = exports.insertNewDocument = void 0;
+exports.deleteAll = exports.deleteByID = exports.updateByID = exports.findOneDocument = exports.readDocumentByModel = exports.readDocument = exports.bulkInsertDocument = exports.insertNewDocument = void 0;
 ;
 ;
 const insertNewDocument = (data) => __awaiter(void 0, void 0, void 0, function* () {
@@ -24,6 +24,10 @@ const readDocument = (collection, args) => __awaiter(void 0, void 0, void 0, fun
     return yield collection.find(args);
 });
 exports.readDocument = readDocument;
+const readDocumentByModel = (model, args) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield model.find(args).toArray();
+});
+exports.readDocumentByModel = readDocumentByModel;
 const findOneDocument = (collection, args) => __awaiter(void 0, void 0, void 0, function* () {
     const query = collection.where(args);
     return yield query.findOne();

@@ -3,17 +3,17 @@ import {
   status,
   message,
   responseHelper,
-  getRegionDB,
 } from "../../_utils";
+import axios from "axios";
 
 export const citiesByCountryStateCode = async (req: express.Request, res: express.Response) => {
   try {
-    const regionDB = getRegionDB();
     const {iso2CountryCode, stateCode} = req.params;
-    const citiesCollection = regionDB.collection("cities");
-    const citiesList = await citiesCollection.find({ country_code: iso2CountryCode, state_code: stateCode }).toArray();
 
-    responseHelper(res, status.success, message.onlySuccess, citiesList);
+    const basePath = process.env.REGION_DATA_BASE_PATH;
+    const getStates = await axios.get(`${basePath}/api/region-data/cities-by-country-state-code/iso2CountryCode=${iso2CountryCode}/stateCode=${stateCode}`);
+
+    responseHelper(res, status.success, message.onlySuccess, getStates.data.data);
   } catch (error) {
     responseHelper(res, status.errorServer, message.errorServer, error.toString());
   }

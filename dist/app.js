@@ -19,7 +19,6 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const compression_1 = __importDefault(require("compression"));
 const router_1 = __importDefault(require("./router"));
-const _utils_1 = require("./_utils");
 const allowedOrigins = [
     "https://666code-react-antd-admin-panel.vercel.app",
     "http://localhost:5173",
@@ -41,7 +40,6 @@ mongoose_1.default.Promise = global.Promise;
 const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield mongoose_1.default.set("strictQuery", false).connect(process.env.MONGODB_URI);
-        yield (0, _utils_1.initializeRegionDB)();
         app.listen(process.env.PORT, () => {
             console.log(`Server Running on:\n http://localhost:${process.env.PORT}`);
         });

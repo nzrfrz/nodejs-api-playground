@@ -8,16 +8,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.statesByCountryCode = void 0;
+const axios_1 = __importDefault(require("axios"));
 const _utils_1 = require("../../_utils");
 const statesByCountryCode = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const regionDB = (0, _utils_1.getRegionDB)();
         const { iso2CountryCode } = req.params;
-        const statesCollection = regionDB.collection("states");
-        const statesList = yield statesCollection.find({ country_code: iso2CountryCode }).toArray();
-        (0, _utils_1.responseHelper)(res, _utils_1.status.success, _utils_1.message.onlySuccess, statesList);
+        const basePath = process.env.REGION_DATA_BASE_PATH;
+        const getStates = yield axios_1.default.get(`${basePath}/api/region-data/states-by-country-code/iso2CountryCode=${iso2CountryCode}`);
+        (0, _utils_1.responseHelper)(res, _utils_1.status.success, _utils_1.message.onlySuccess, getStates.data.data);
     }
     catch (error) {
         (0, _utils_1.responseHelper)(res, _utils_1.status.errorServer, _utils_1.message.errorServer, error.toString());

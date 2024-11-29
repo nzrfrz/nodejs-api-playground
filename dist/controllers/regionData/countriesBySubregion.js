@@ -8,16 +8,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.countriesBySubregion = void 0;
+const axios_1 = __importDefault(require("axios"));
 const _utils_1 = require("../../_utils");
 const countriesBySubregion = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const regionDB = (0, _utils_1.getRegionDB)();
         const { subregionId } = req.params;
-        const countriesCollection = regionDB.collection("countries");
-        const countriesList = yield countriesCollection.find({ subregion_id: subregionId }).toArray();
-        (0, _utils_1.responseHelper)(res, _utils_1.status.success, _utils_1.message.onlySuccess, countriesList);
+        const basePath = process.env.REGION_DATA_BASE_PATH;
+        const getCountries = yield axios_1.default.get(`${basePath}/api/region-data/countries-by-subregion/subregionId=${subregionId}`);
+        (0, _utils_1.responseHelper)(res, _utils_1.status.success, _utils_1.message.onlySuccess, getCountries.data.data);
     }
     catch (error) {
         (0, _utils_1.responseHelper)(res, _utils_1.status.errorServer, _utils_1.message.errorServer, error.toString());
