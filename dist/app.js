@@ -18,7 +18,6 @@ const express_1 = __importDefault(require("express"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const compression_1 = __importDefault(require("compression"));
-const chrome_aws_lambda_1 = __importDefault(require("chrome-aws-lambda"));
 const router_1 = __importDefault(require("./router"));
 const allowedOrigins = [
     "https://666code-react-antd-admin-panel.vercel.app",
@@ -40,7 +39,7 @@ app.use(body_parser_1.default.json());
 mongoose_1.default.Promise = global.Promise;
 const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // await mongoose.set("strictQuery", false).connect(process.env.MONGODB_URI);
+        yield mongoose_1.default.set("strictQuery", false).connect(process.env.MONGODB_URI);
         app.listen(process.env.PORT, () => {
             console.log(`Server Running on:\n http://localhost:${process.env.PORT}`);
         });
@@ -58,45 +57,4 @@ app.get("/api", (_, res) => {
     });
 });
 app.use("/api", (0, router_1.default)());
-app.use("/proxying", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const targetUrl = req.query.url;
-        if (!targetUrl) {
-            res.status(400).send({ message: 'Missing URL parameter' });
-            return;
-        }
-        const browser = yield chrome_aws_lambda_1.default.puppeteer.launch({
-            defaultViewport: chrome_aws_lambda_1.default.defaultViewport,
-            executablePath: yield chrome_aws_lambda_1.default.executablePath,
-            headless: true,
-            args: [
-                '--disable-setuid-sandbox',
-                '--no-sandbox',
-                '--disable-dev-shm-usage',
-                '--disable-web-security',
-                '--disable-features=IsolateOrigins,site-per-process',
-                '--host-resolver-rules=MAP * 8.8.8.8',
-            ],
-        });
-        const page = yield browser.newPage();
-        const fullTargetUrl = `https://${targetUrl}`;
-        yield page.goto(fullTargetUrl, { waitUntil: 'domcontentloaded' });
-        /*
-        let document: any = await page.evaluate(() => document.documentElement.outerHTML);
-        const proxyBase = `${req.protocol}://${req.get('host')}/?url=`;
-        document = document
-          .replace(/href="\/([^"]*)"/g, `href="${proxyBase}${targetUrl}/$1"`)
-          .replace(/src="\/([^"]*)"/g, `src="${proxyBase}${targetUrl}/$1"`)
-          .replace(/href="https:\/\/([^"]*)"/g, `href="${proxyBase}$1"`)
-          .replace(/src="https:\/\/([^"]*)"/g, `src="${proxyBase}$1"`);
-        */
-        const content = yield page.content();
-        yield browser.close();
-        res.send(content);
-    }
-    catch (error) {
-        console.error('Proxy error:', error);
-        res.status(500).send('Failed to load the requested URL.');
-    }
-}));
 //# sourceMappingURL=app.js.map
