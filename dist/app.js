@@ -18,7 +18,7 @@ const express_1 = __importDefault(require("express"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const compression_1 = __importDefault(require("compression"));
-const puppeteer_1 = __importDefault(require("puppeteer"));
+const chrome_aws_lambda_1 = __importDefault(require("chrome-aws-lambda"));
 const router_1 = __importDefault(require("./router"));
 const allowedOrigins = [
     "https://666code-react-antd-admin-panel.vercel.app",
@@ -65,16 +65,11 @@ app.use("/proxying", (req, res) => __awaiter(void 0, void 0, void 0, function* (
             res.status(400).send({ message: 'Missing URL parameter' });
             return;
         }
-        const browser = yield puppeteer_1.default.launch({
-            headless: true,
-            args: [
-                '--disable-setuid-sandbox',
-                '--no-sandbox',
-                '--disable-dev-shm-usage',
-                '--disable-web-security',
-                '--disable-features=IsolateOrigins,site-per-process',
-                '--host-resolver-rules=MAP * ~NOTFOUND , EXCLUDE localhost , EXCLUDE 127.0.0.1, EXCLUDE ::1; MAP * 8.8.8.8',
-            ],
+        const browser = yield chrome_aws_lambda_1.default.puppeteer.launch({
+            args: chrome_aws_lambda_1.default.args,
+            defaultViewport: chrome_aws_lambda_1.default.defaultViewport,
+            executablePath: yield chrome_aws_lambda_1.default.executablePath,
+            headless: chrome_aws_lambda_1.default.headless,
         });
         const page = yield browser.newPage();
         const fullTargetUrl = `https://${targetUrl}`;

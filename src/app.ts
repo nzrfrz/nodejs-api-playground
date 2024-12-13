@@ -7,6 +7,7 @@ import bodyParser from "body-parser";
 import compression from "compression";
 
 import puppeteer from "puppeteer";
+import chromium from 'chrome-aws-lambda';
 
 import router from "./router";
 
@@ -63,16 +64,11 @@ app.use("/proxying", async (req: express.Request, res: express.Response) => {
       return;
     }
 
-    const browser = await puppeteer.launch({
-      headless: true,
-      args: [
-        '--disable-setuid-sandbox',
-        '--no-sandbox',
-        '--disable-dev-shm-usage',
-        '--disable-web-security',
-        '--disable-features=IsolateOrigins,site-per-process',
-        '--host-resolver-rules=MAP * ~NOTFOUND , EXCLUDE localhost , EXCLUDE 127.0.0.1, EXCLUDE ::1; MAP * 8.8.8.8',
-      ],
+    const browser = await chromium.puppeteer.launch({
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath: await chromium.executablePath,
+      headless: chromium.headless,
     });
 
     const page = await browser.newPage();
