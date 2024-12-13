@@ -6,6 +6,8 @@ import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import compression from "compression";
 
+import puppeteer from "puppeteer";
+
 import router from "./router";
 
 const allowedOrigins = [
@@ -51,3 +53,47 @@ app.get("/api", (_, res) => {
 });
 
 app.use("/api", router());
+
+app.use("/proxying", async (req: express.Request, res: express.Response) => {
+  try {
+    const targetUrl = req.query.url as string;
+
+    if (!targetUrl) {
+      res.status(400).send({ message: 'Missing URL parameter' });
+      return;
+    }
+
+    const browser = await puppeteer.launch({
+      headless: true,
+      args: [
+        '--disable-setuid-sandbox',
+        '--no-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-web-security',
+        '--disable-features=IsolateOrigins,site-per-process',
+        '--host-resolver-rules=MAP * ~NOTFOUND , EXCLUDE localhost , EXCLUDE 127.0.0.1, EXCLUDE ::1; MAP * 8.8.8.8',
+      ],
+    });
+
+    const page = await browser.newPage();
+
+    const fullTargetUrl = `https://${targetUrl}`;
+    await page.goto(fullTargetUrl, { waitUntil: 'domcontentloaded' });
+
+    let document: any = await page.evaluate(() => document.documentElement.outerHTML);
+
+    const proxyBase = `${req.protocol}://${req.get('host')}/?url=`;
+    document = document
+      .replace(/href="\/([^"]*)"/g, `href="${proxyBase}${targetUrl}/$1"`)
+      .replace(/src="\/([^"]*)"/g, `src="${proxyBase}${targetUrl}/$1"`)
+      .replace(/href="https:\/\/([^"]*)"/g, `href="${proxyBase}$1"`)
+      .replace(/src="https:\/\/([^"]*)"/g, `src="${proxyBase}$1"`);
+
+    await browser.close();
+
+    res.send(document);
+  } catch (error) {
+    console.error('Proxy error:', error);
+    res.status(500).send('Failed to load the requested URL.');
+  }
+});
