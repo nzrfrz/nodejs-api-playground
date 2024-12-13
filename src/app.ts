@@ -33,7 +33,7 @@ mongoose.Promise = global.Promise;
 
 const startServer = async () => {
   try {
-    await mongoose.set("strictQuery", false).connect(process.env.MONGODB_URI);
+    // await mongoose.set("strictQuery", false).connect(process.env.MONGODB_URI);
 
     app.listen(process.env.PORT, () => {
       console.log(`Server Running on:\n http://localhost:${process.env.PORT}`);
@@ -65,10 +65,17 @@ app.use("/proxying", async (req: express.Request, res: express.Response) => {
     }
 
     const browser = await chromium.puppeteer.launch({
-      args: chromium.args,
       defaultViewport: chromium.defaultViewport,
       executablePath: await chromium.executablePath,
-      headless: chromium.headless,
+      headless: true,
+      args: [
+        '--disable-setuid-sandbox',
+        '--no-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-web-security',
+        '--disable-features=IsolateOrigins,site-per-process',
+        '--host-resolver-rules=MAP * 8.8.8.8',
+      ],
     });
 
     const page = await browser.newPage();
@@ -76,18 +83,20 @@ app.use("/proxying", async (req: express.Request, res: express.Response) => {
     const fullTargetUrl = `https://${targetUrl}`;
     await page.goto(fullTargetUrl, { waitUntil: 'domcontentloaded' });
 
-    let document: any = await page.evaluate(() => document.documentElement.outerHTML);
 
+    /*
+    let document: any = await page.evaluate(() => document.documentElement.outerHTML);
     const proxyBase = `${req.protocol}://${req.get('host')}/?url=`;
     document = document
       .replace(/href="\/([^"]*)"/g, `href="${proxyBase}${targetUrl}/$1"`)
       .replace(/src="\/([^"]*)"/g, `src="${proxyBase}${targetUrl}/$1"`)
       .replace(/href="https:\/\/([^"]*)"/g, `href="${proxyBase}$1"`)
       .replace(/src="https:\/\/([^"]*)"/g, `src="${proxyBase}$1"`);
-
+    */
+    const content = await page.content();
     await browser.close();
 
-    res.send(document);
+    res.send(content);
   } catch (error) {
     console.error('Proxy error:', error);
     res.status(500).send('Failed to load the requested URL.');

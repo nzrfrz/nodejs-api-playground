@@ -40,7 +40,7 @@ app.use(body_parser_1.default.json());
 mongoose_1.default.Promise = global.Promise;
 const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield mongoose_1.default.set("strictQuery", false).connect(process.env.MONGODB_URI);
+        // await mongoose.set("strictQuery", false).connect(process.env.MONGODB_URI);
         app.listen(process.env.PORT, () => {
             console.log(`Server Running on:\n http://localhost:${process.env.PORT}`);
         });
@@ -66,23 +66,33 @@ app.use("/proxying", (req, res) => __awaiter(void 0, void 0, void 0, function* (
             return;
         }
         const browser = yield chrome_aws_lambda_1.default.puppeteer.launch({
-            args: chrome_aws_lambda_1.default.args,
             defaultViewport: chrome_aws_lambda_1.default.defaultViewport,
             executablePath: yield chrome_aws_lambda_1.default.executablePath,
-            headless: chrome_aws_lambda_1.default.headless,
+            headless: true,
+            args: [
+                '--disable-setuid-sandbox',
+                '--no-sandbox',
+                '--disable-dev-shm-usage',
+                '--disable-web-security',
+                '--disable-features=IsolateOrigins,site-per-process',
+                '--host-resolver-rules=MAP * 8.8.8.8',
+            ],
         });
         const page = yield browser.newPage();
         const fullTargetUrl = `https://${targetUrl}`;
         yield page.goto(fullTargetUrl, { waitUntil: 'domcontentloaded' });
-        let document = yield page.evaluate(() => document.documentElement.outerHTML);
+        /*
+        let document: any = await page.evaluate(() => document.documentElement.outerHTML);
         const proxyBase = `${req.protocol}://${req.get('host')}/?url=`;
         document = document
-            .replace(/href="\/([^"]*)"/g, `href="${proxyBase}${targetUrl}/$1"`)
-            .replace(/src="\/([^"]*)"/g, `src="${proxyBase}${targetUrl}/$1"`)
-            .replace(/href="https:\/\/([^"]*)"/g, `href="${proxyBase}$1"`)
-            .replace(/src="https:\/\/([^"]*)"/g, `src="${proxyBase}$1"`);
+          .replace(/href="\/([^"]*)"/g, `href="${proxyBase}${targetUrl}/$1"`)
+          .replace(/src="\/([^"]*)"/g, `src="${proxyBase}${targetUrl}/$1"`)
+          .replace(/href="https:\/\/([^"]*)"/g, `href="${proxyBase}$1"`)
+          .replace(/src="https:\/\/([^"]*)"/g, `src="${proxyBase}$1"`);
+        */
+        const content = yield page.content();
         yield browser.close();
-        res.send(document);
+        res.send(content);
     }
     catch (error) {
         console.error('Proxy error:', error);
