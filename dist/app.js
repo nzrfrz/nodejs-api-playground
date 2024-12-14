@@ -18,6 +18,7 @@ const express_1 = __importDefault(require("express"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const compression_1 = __importDefault(require("compression"));
+var Unblocker = require('unblocker');
 const router_1 = __importDefault(require("./router"));
 const allowedOrigins = [
     "https://666code-react-antd-admin-panel.vercel.app",
@@ -48,7 +49,6 @@ const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
         console.log("Server Error: \n", error.toString());
     }
 });
-startServer();
 app.get("/api", (_, res) => {
     res.status(200).send({
         status: 200,
@@ -56,5 +56,11 @@ app.get("/api", (_, res) => {
         data: null
     });
 });
+const unblockerConfig = {
+    prefix: '/proxy/',
+};
+const unblocker = new Unblocker(unblockerConfig);
+app.use(unblocker);
+startServer();
 app.use("/api", (0, router_1.default)());
 //# sourceMappingURL=app.js.map

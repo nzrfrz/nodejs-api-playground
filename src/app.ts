@@ -6,6 +6,8 @@ import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import compression from "compression";
 
+var Unblocker = require('unblocker');
+
 import router from "./router";
 
 const allowedOrigins = [
@@ -40,8 +42,6 @@ const startServer = async () => {
   }
 };
 
-startServer();
-
 app.get("/api", (_, res) => {
   res.status(200).send({
     status: 200,
@@ -49,5 +49,15 @@ app.get("/api", (_, res) => {
     data: null
   });
 });
+
+const unblockerConfig = {
+  prefix: '/proxy/',
+};
+
+const unblocker = new Unblocker(unblockerConfig);
+
+app.use(unblocker);
+
+startServer();
 
 app.use("/api", router());
