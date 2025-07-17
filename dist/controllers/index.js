@@ -28,4 +28,6 @@ __exportStar(require("./fnb/fnbDelete"), exports);
 __exportStar(require("./regionData/countriesBySubregion"), exports);
 __exportStar(require("./regionData/statesByCountryCode"), exports);
 __exportStar(require("./regionData/citiesByCountryStateCode"), exports);
+__exportStar(require("./media/awsUploadFileV2"), exports);
+__exportStar(require("./media/awsDeleteFileV2"), exports);
 //# sourceMappingURL=index.js.map

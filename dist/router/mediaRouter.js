@@ -7,5 +7,7 @@ exports.default = (router) => {
     router.post("/s3-upload/url/file/", controllers_1.awsUploadFromURL);
     router.post("/s3-upload/file", controllers_1.awsUploadMulter.single("file"), controllers_1.awsUploadFile);
     router.delete("/s3-delete/file", controllers_1.awsDeleteFile);
+    router.post('/s3-upload-v2/file', controllers_1.awsUploadMulterV2.single("file"), controllers_1.awsUploadFileV2);
+    router.delete("/s3-delete-v2/file", controllers_1.awsDeleteFileV2);
 };
 //# sourceMappingURL=mediaRouter.js.map
