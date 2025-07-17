@@ -6,8 +6,6 @@ import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import compression from "compression";
 
-var Unblocker = require('unblocker');
-
 import router from "./router";
 
 const allowedOrigins = [
@@ -32,7 +30,7 @@ mongoose.Promise = global.Promise;
 
 const startServer = async () => {
   try {
-    await mongoose.set("strictQuery", false).connect(process.env.MONGODB_URI);
+    // await mongoose.set("strictQuery", false).connect(process.env.MONGODB_URI);
 
     app.listen(process.env.PORT, () => {
       console.log(`Server Running on:\n http://localhost:${process.env.PORT}`);
@@ -49,14 +47,6 @@ app.get("/api", (_, res) => {
     data: null
   });
 });
-
-const unblockerConfig = {
-  prefix: '/proxy/',
-};
-
-const unblocker = new Unblocker(unblockerConfig);
-
-app.use(unblocker);
 
 startServer();
 

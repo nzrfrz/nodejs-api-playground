@@ -14,3 +14,6 @@ export * from "./fnb/fnbDelete";
 export * from "./regionData/countriesBySubregion";
 export * from "./regionData/statesByCountryCode";
 export * from "./regionData/citiesByCountryStateCode";
+
+export * from "./media/awsUploadFileV2";
+export * from "./media/awsDeleteFileV2";

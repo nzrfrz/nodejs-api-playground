@@ -76,7 +76,8 @@ export const awsUploadFile = async (req: express.Request, res: express.Response)
         Body: thumbnailBuffer,
         ContentType: file.mimetype,
       });
-      await s3.send(uploadThumbnailImage);
+      const doUpload = await s3.send(uploadThumbnailImage);
+      console.log('do upload v1: ', doUpload);
     }
 
     const imageResults = {
