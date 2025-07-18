@@ -21,25 +21,24 @@ const compression_1 = __importDefault(require("compression"));
 const router_1 = __importDefault(require("./router"));
 const allowedOrigins = [
     "https://666code-react-antd-admin-panel.vercel.app",
-    "http://localhost:5173",
-    undefined,
+    "http://localhost:5173", // for local development
+    undefined, // for api client like insomnia, postman, etc
 ];
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)({
     origin: (origin, callback) => {
+        console.log('origin: ', origin);
         // if (!origin || allowedOrigins.indexOf(origin) !== -1) callback(null, true);
         if (!origin || allowedOrigins.includes(origin))
             callback(null, true);
         else
             callback(new Error('Not allowed by CORS'));
     },
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
     optionsSuccessStatus: 200,
 }));
 app.use((0, compression_1.default)());
 app.use(body_parser_1.default.json());
-app.options('*', (0, cors_1.default)());
+// app.options('*', cors());
 mongoose_1.default.Promise = global.Promise;
 const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
     try {

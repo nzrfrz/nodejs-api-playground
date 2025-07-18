@@ -10,26 +10,26 @@ import router from "./router";
 
 const allowedOrigins = [
   "https://666code-react-antd-admin-panel.vercel.app",
-  "http://localhost:5173",
-  undefined,
+  "http://localhost:5173", // for local development
+  undefined, // for api client like insomnia, postman, etc
 ];
 
 const app = express();
 
 app.use(cors({
   origin: (origin, callback) => {
+    console.log('origin: ', origin);
+
     // if (!origin || allowedOrigins.indexOf(origin) !== -1) callback(null, true);
     if (!origin || allowedOrigins.includes(origin)) callback(null, true);
     else callback(new Error('Not allowed by CORS'));
   },
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
   optionsSuccessStatus: 200,
 }));
 
 app.use(compression());
 app.use(bodyParser.json());
-app.options('*', cors());
+// app.options('*', cors());
 
 mongoose.Promise = global.Promise;
 
