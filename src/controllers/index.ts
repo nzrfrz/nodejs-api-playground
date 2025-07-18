@@ -3,6 +3,10 @@ export * from "./media/awsDeleteFile";
 export * from "./media/awsUploadFromURL";
 export * from "./media/awsCheckExistingFile";
 export * from "./media/checkUrlFileValidity";
+/**
+ * Reserved for next development
+ export * from "./media/awsPresignedURL"; 
+*/
 
 export * from "./fnb/fnbCatInsert";
 export * from "./fnb/fnbCatGet";

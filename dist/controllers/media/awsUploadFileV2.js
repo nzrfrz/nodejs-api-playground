@@ -32,9 +32,15 @@ const awsUploadFileV2 = (req, res) => __awaiter(void 0, void 0, void 0, function
             (0, _utils_1.responseHelper)(res, _utils_1.status.errorRequest, _utils_1.message.errorRequest, null);
             return;
         }
+        const DEFAULT_MAX_FILE_SIZE = 5; // remove this if not using vercel hobby plan
         const sizeInMB = (file.size / (1024 * 1024)).toFixed(2);
-        if ((maxFileSize !== '' || maxFileSize !== undefined) && sizeInMB > maxFileSize) {
-            (0, _utils_1.responseHelper)(res, _utils_1.status.errorRequest, _utils_1.message.errorRequest, { message: `File size is more than ${maxFileSize}MB` });
+        let finalMaxFileSize;
+        if (maxFileSize === '' || maxFileSize === 'undefined')
+            finalMaxFileSize = DEFAULT_MAX_FILE_SIZE;
+        else
+            finalMaxFileSize = maxFileSize;
+        if (sizeInMB > finalMaxFileSize) {
+            (0, _utils_1.responseHelper)(res, _utils_1.status.errorRequest, _utils_1.message.errorRequest, { message: `File size is more than ${finalMaxFileSize}MB` });
             return;
         }
         const targetPath = ((_a = fileTypeList_1.fileTypeList.find((item) => item.mimeType === file.mimetype)) === null || _a === void 0 ? void 0 : _a.alias) + 's';
@@ -55,7 +61,6 @@ const awsUploadFileV2 = (req, res) => __awaiter(void 0, void 0, void 0, function
                 break;
         }
         // console.log('target path: ', targetPath);
-        console.log('max file size: ', maxFileSize);
         (0, _utils_1.responseHelper)(res, _utils_1.status.success, _utils_1.message.onlySuccess, uploadResponse);
     }
     catch (error) {

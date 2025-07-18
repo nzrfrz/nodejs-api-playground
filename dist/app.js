@@ -27,8 +27,6 @@ const allowedOrigins = [
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)({
     origin: (origin, callback) => {
-        console.log('origin: ', origin);
-        // if (!origin || allowedOrigins.indexOf(origin) !== -1) callback(null, true);
         if (!origin || allowedOrigins.includes(origin))
             callback(null, true);
         else

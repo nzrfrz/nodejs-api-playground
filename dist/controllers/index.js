@@ -19,6 +19,10 @@ __exportStar(require("./media/awsDeleteFile"), exports);
 __exportStar(require("./media/awsUploadFromURL"), exports);
 __exportStar(require("./media/awsCheckExistingFile"), exports);
 __exportStar(require("./media/checkUrlFileValidity"), exports);
+/**
+ * Reserved for next development
+ export * from "./media/awsPresignedURL";
+*/
 __exportStar(require("./fnb/fnbCatInsert"), exports);
 __exportStar(require("./fnb/fnbCatGet"), exports);
 __exportStar(require("./fnb/fnbInsert"), exports);
