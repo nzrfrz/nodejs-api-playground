@@ -33,7 +33,7 @@ const awsUploadFileV2 = (req, res) => __awaiter(void 0, void 0, void 0, function
             return;
         }
         const sizeInMB = (file.size / (1024 * 1024)).toFixed(2);
-        if (maxFileSize !== '' && sizeInMB > maxFileSize) {
+        if ((maxFileSize !== '' || maxFileSize !== undefined) && sizeInMB > maxFileSize) {
             (0, _utils_1.responseHelper)(res, _utils_1.status.errorRequest, _utils_1.message.errorRequest, { message: `File size is more than ${maxFileSize}MB` });
             return;
         }
@@ -55,7 +55,7 @@ const awsUploadFileV2 = (req, res) => __awaiter(void 0, void 0, void 0, function
                 break;
         }
         // console.log('target path: ', targetPath);
-        // console.log('file detail: ', file);
+        console.log('max file size: ', maxFileSize);
         (0, _utils_1.responseHelper)(res, _utils_1.status.success, _utils_1.message.onlySuccess, uploadResponse);
     }
     catch (error) {

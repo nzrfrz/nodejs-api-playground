@@ -27,7 +27,7 @@ export const awsUploadFileV2 = async (req: express.Request, res: express.Respons
 
 		const sizeInMB = (file.size / (1024 * 1024)).toFixed(2);
 
-		if (maxFileSize !== '' && sizeInMB > maxFileSize) {
+		if ((maxFileSize !== '' || maxFileSize !== undefined) && sizeInMB > maxFileSize) {
       responseHelper(res, status.errorRequest, message.errorRequest, { message: `File size is more than ${maxFileSize}MB` });
       return;
 		}
@@ -53,7 +53,7 @@ export const awsUploadFileV2 = async (req: express.Request, res: express.Respons
 		}
 
 		// console.log('target path: ', targetPath);
-		// console.log('file detail: ', file);
+		console.log('max file size: ', maxFileSize);
 		responseHelper(res, status.success, message.onlySuccess, uploadResponse);
 	} catch (error) {
 		console.log(error);
