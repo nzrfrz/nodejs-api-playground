@@ -28,7 +28,8 @@ export const imageUploader = async (file: Express.Multer.File, targetPath: strin
   else if (isSVG === true) originalImageFileBuffer = file.buffer;
   else originalImageFileBuffer = await sharp(file.buffer).webp().toBuffer();
 
-  const bufferForGIF = await sharp(file.buffer, { animated: true }).resize(maxWidth, maxHeight, { fit: "inside" }).gif().toBuffer();
+  // const bufferForGIF = await sharp(file.buffer, { animated: true }).resize(maxWidth, maxHeight, { fit: "inside" }).gif().toBuffer();
+  const bufferForGIF = await sharp(file.buffer, { animated: true }).gif().toBuffer();
   const bufferForOther = await sharp(file.buffer).resize(maxWidth, maxHeight, { fit: "inside" }).webp().toBuffer();
   const finalImageBuffer = isGIF === false ? bufferForOther : bufferForGIF
 

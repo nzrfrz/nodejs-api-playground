@@ -39,7 +39,8 @@ const imageUploader = (file, targetPath) => __awaiter(void 0, void 0, void 0, fu
         originalImageFileBuffer = file.buffer;
     else
         originalImageFileBuffer = yield (0, sharp_1.default)(file.buffer).webp().toBuffer();
-    const bufferForGIF = yield (0, sharp_1.default)(file.buffer, { animated: true }).resize(maxWidth, maxHeight, { fit: "inside" }).gif().toBuffer();
+    // const bufferForGIF = await sharp(file.buffer, { animated: true }).resize(maxWidth, maxHeight, { fit: "inside" }).gif().toBuffer();
+    const bufferForGIF = yield (0, sharp_1.default)(file.buffer, { animated: true }).gif().toBuffer();
     const bufferForOther = yield (0, sharp_1.default)(file.buffer).resize(maxWidth, maxHeight, { fit: "inside" }).webp().toBuffer();
     const finalImageBuffer = isGIF === false ? bufferForOther : bufferForGIF;
     if (width > maxWidth || height > maxHeight)
