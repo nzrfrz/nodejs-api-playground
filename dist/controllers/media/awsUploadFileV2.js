@@ -60,7 +60,7 @@ const awsUploadFileV2 = (req, res) => __awaiter(void 0, void 0, void 0, function
                 uploadResponse = yield (0, fileUploader_1.fileUploader)(file, targetPath);
                 break;
         }
-        // console.log('target path: ', targetPath);
+        // console.log('target path: ', file);
         (0, _utils_1.responseHelper)(res, _utils_1.status.success, _utils_1.message.onlySuccess, uploadResponse);
     }
     catch (error) {

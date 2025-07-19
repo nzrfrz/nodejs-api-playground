@@ -41,7 +41,7 @@ const awsDeleteFileV2 = (req, res) => __awaiter(void 0, void 0, void 0, function
             });
             yield _utils_1.s3.send(deleteThumbnailImage);
         }
-        // console.log(awsTargetPath);
+        // console.log(awsCompleteTargetPath);
         (0, _utils_1.responseHelper)(res, _utils_1.status.success, _utils_1.message.successDelete, null);
     }
     catch (error) {

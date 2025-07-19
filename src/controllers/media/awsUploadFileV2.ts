@@ -57,7 +57,7 @@ export const awsUploadFileV2 = async (req: express.Request, res: express.Respons
 				break;
 		}
 
-		// console.log('target path: ', targetPath);
+		// console.log('target path: ', file);
 		responseHelper(res, status.success, message.onlySuccess, uploadResponse);
 	} catch (error) {
 		console.log(error);

@@ -40,7 +40,7 @@ export const awsDeleteFileV2 = async (req: express.Request, res: express.Respons
       await s3.send(deleteThumbnailImage);
     }
 
-    // console.log(awsTargetPath);
+    // console.log(awsCompleteTargetPath);
     responseHelper(res, status.success, message.successDelete, null);
   } catch (error) {
     // console.log('aws delete file v2: ', error);    
