@@ -6,6 +6,8 @@ import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import compression from "compression";
 
+import { staticFileViewer, staticThumbnailViewer } from "./controllers";
+
 import router from "./router";
 
 const allowedOrigins = [
@@ -32,7 +34,7 @@ mongoose.Promise = global.Promise;
 
 const startServer = async () => {
   try {
-    await mongoose.set("strictQuery", false).connect(process.env.MONGODB_URI);
+    // await mongoose.set("strictQuery", false).connect(process.env.MONGODB_URI);
 
     app.listen(process.env.PORT, () => {
       console.log(`Server Running on:\n http://localhost:${process.env.PORT}`);
@@ -48,6 +50,14 @@ app.get("/api", (_, res) => {
     message: "Server up and running, all database connected successfully...",
     data: null
   });
+});
+
+app.get('/static-view', async (req, res) => {
+  await staticFileViewer(req, res);
+});
+
+app.get('/static-view-thumbnail', async (req, res) => {
+  await staticThumbnailViewer(req, res);
 });
 
 startServer();

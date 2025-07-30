@@ -3,6 +3,13 @@ export * from "./media/awsDeleteFile";
 export * from "./media/awsUploadFromURL";
 export * from "./media/awsCheckExistingFile";
 export * from "./media/checkUrlFileValidity";
+
+export * from "./media/serverUpload/serverUploadFile";
+export * from "./media/serverUpload/staticFileViewer";
+export * from "./media/serverUpload/staticThumbnailViewer";
+export * from "./media/serverUpload/serverDeleteFile";
+export * from "./media/serverUpload/serverDeleteAllFile";
+
 /**
  * Reserved for next development
  export * from "./media/awsPresignedURL"; 

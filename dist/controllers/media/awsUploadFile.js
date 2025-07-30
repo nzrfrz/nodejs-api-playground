@@ -79,7 +79,7 @@ const awsUploadFile = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                 ContentType: file.mimetype,
             });
             const doUpload = yield _utils_1.s3.send(uploadThumbnailImage);
-            console.log('do upload v1: ', doUpload);
+            // console.log('do upload v1: ', doUpload);
         }
         const imageResults = {
             fileResults: {

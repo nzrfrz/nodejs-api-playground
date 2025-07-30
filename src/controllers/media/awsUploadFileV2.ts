@@ -7,9 +7,9 @@ import {
 	responseHelper,
 } from "../../_utils";
 import { fileTypeList } from "./uploaderUtils/fileTypeList";
-import { imageUploader } from "./uploaderUtils/imageUploader";
 import { videoUploader } from "./uploaderUtils/videoUploader";
 import { fileUploader } from "./uploaderUtils/fileUploader";
+import { imageUploaderV2 } from "./uploaderUtils/imageUploaderV2";
 
 dotenv.config();
 
@@ -44,10 +44,11 @@ export const awsUploadFileV2 = async (req: express.Request, res: express.Respons
 			return;
 		}
 
-		let uploadResponse;		
+		let uploadResponse;
 		switch (targetPath) {
 			case 'images':
-				uploadResponse = await imageUploader(file, targetPath);
+				// uploadResponse = await imageUploader(file, targetPath);
+				uploadResponse = await imageUploaderV2(file, targetPath);
 				break;
 			case 'videos':
 				uploadResponse = await videoUploader(file, targetPath);
@@ -56,11 +57,10 @@ export const awsUploadFileV2 = async (req: express.Request, res: express.Respons
 				uploadResponse = await fileUploader(file, targetPath);
 				break;
 		}
-
-		// console.log('target path: ', file);
+		
 		responseHelper(res, status.success, message.onlySuccess, uploadResponse);
 	} catch (error) {
-		console.log(error);
+		console.log('s3 file uploader v2 error: ', error);
 		responseHelper(res, status.errorServer, message.errorServer, error);
 	}
 };

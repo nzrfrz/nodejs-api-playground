@@ -19,6 +19,11 @@ __exportStar(require("./media/awsDeleteFile"), exports);
 __exportStar(require("./media/awsUploadFromURL"), exports);
 __exportStar(require("./media/awsCheckExistingFile"), exports);
 __exportStar(require("./media/checkUrlFileValidity"), exports);
+__exportStar(require("./media/serverUpload/serverUploadFile"), exports);
+__exportStar(require("./media/serverUpload/staticFileViewer"), exports);
+__exportStar(require("./media/serverUpload/staticThumbnailViewer"), exports);
+__exportStar(require("./media/serverUpload/serverDeleteFile"), exports);
+__exportStar(require("./media/serverUpload/serverDeleteAllFile"), exports);
 /**
  * Reserved for next development
  export * from "./media/awsPresignedURL";

@@ -17,9 +17,9 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const multer_1 = __importDefault(require("multer"));
 const _utils_1 = require("../../_utils");
 const fileTypeList_1 = require("./uploaderUtils/fileTypeList");
-const imageUploader_1 = require("./uploaderUtils/imageUploader");
 const videoUploader_1 = require("./uploaderUtils/videoUploader");
 const fileUploader_1 = require("./uploaderUtils/fileUploader");
+const imageUploaderV2_1 = require("./uploaderUtils/imageUploaderV2");
 dotenv_1.default.config();
 const storage = multer_1.default.memoryStorage();
 exports.awsUploadMulterV2 = (0, multer_1.default)({ storage: storage });
@@ -51,7 +51,8 @@ const awsUploadFileV2 = (req, res) => __awaiter(void 0, void 0, void 0, function
         let uploadResponse;
         switch (targetPath) {
             case 'images':
-                uploadResponse = yield (0, imageUploader_1.imageUploader)(file, targetPath);
+                // uploadResponse = await imageUploader(file, targetPath);
+                uploadResponse = yield (0, imageUploaderV2_1.imageUploaderV2)(file, targetPath);
                 break;
             case 'videos':
                 uploadResponse = yield (0, videoUploader_1.videoUploader)(file, targetPath);
@@ -60,11 +61,10 @@ const awsUploadFileV2 = (req, res) => __awaiter(void 0, void 0, void 0, function
                 uploadResponse = yield (0, fileUploader_1.fileUploader)(file, targetPath);
                 break;
         }
-        // console.log('target path: ', file);
         (0, _utils_1.responseHelper)(res, _utils_1.status.success, _utils_1.message.onlySuccess, uploadResponse);
     }
     catch (error) {
-        console.log(error);
+        console.log('s3 file uploader v2 error: ', error);
         (0, _utils_1.responseHelper)(res, _utils_1.status.errorServer, _utils_1.message.errorServer, error);
     }
 });

@@ -18,6 +18,7 @@ const express_1 = __importDefault(require("express"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const compression_1 = __importDefault(require("compression"));
+const controllers_1 = require("./controllers");
 const router_1 = __importDefault(require("./router"));
 const allowedOrigins = [
     "https://666code-react-antd-admin-panel.vercel.app",
@@ -40,7 +41,7 @@ app.use(body_parser_1.default.json());
 mongoose_1.default.Promise = global.Promise;
 const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield mongoose_1.default.set("strictQuery", false).connect(process.env.MONGODB_URI);
+        // await mongoose.set("strictQuery", false).connect(process.env.MONGODB_URI);
         app.listen(process.env.PORT, () => {
             console.log(`Server Running on:\n http://localhost:${process.env.PORT}`);
         });
@@ -56,6 +57,12 @@ app.get("/api", (_, res) => {
         data: null
     });
 });
+app.get('/static-view', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield (0, controllers_1.staticFileViewer)(req, res);
+}));
+app.get('/static-view-thumbnail', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield (0, controllers_1.staticThumbnailViewer)(req, res);
+}));
 startServer();
 app.use("/api", (0, router_1.default)());
 //# sourceMappingURL=app.js.map

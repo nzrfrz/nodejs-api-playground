@@ -1,3 +1,0 @@
-image/jpg
-image/png
-image/jpeg
