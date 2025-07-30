@@ -26,7 +26,7 @@ const awsDeleteFileV2 = (req, res) => __awaiter(void 0, void 0, void 0, function
             return;
         }
         const splitFileName = fileName.split('.');
-        const fileExtension = `.${splitFileName[splitFileName.length - 1]}`;
+        const fileExtension = `${splitFileName[splitFileName.length - 1]}`;
         const awsTargetPath = fileTypeList_1.fileTypeList.find((item) => item.fileType === fileExtension).alias + 's';
         const awsCompleteTargetPath = `playground/${awsTargetPath}/${fileName}`;
         const deleteTargetFile = new client_s3_1.DeleteObjectCommand({
@@ -41,11 +41,10 @@ const awsDeleteFileV2 = (req, res) => __awaiter(void 0, void 0, void 0, function
             });
             yield _utils_1.s3.send(deleteThumbnailImage);
         }
-        // console.log(awsCompleteTargetPath);
         (0, _utils_1.responseHelper)(res, _utils_1.status.success, _utils_1.message.successDelete, null);
     }
     catch (error) {
-        // console.log('aws delete file v2: ', error);    
+        console.log('aws delete file v2: ', error);
         (0, _utils_1.responseHelper)(res, _utils_1.status.errorServer, _utils_1.message.errorServer, error.toString());
     }
 });
